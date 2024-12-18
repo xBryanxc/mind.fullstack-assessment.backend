@@ -1,6 +1,7 @@
 using mind.Core.Interfaces.IRepositories;
 using mind.Core.Interfaces.IServices;
 using mind.Core.Models.DbModels;
+using mind.Core.Models.DTOs;
 
 namespace mind.Core.Services;
 
@@ -13,14 +14,24 @@ public class EmployeeService : IEmployeeService
         _employeeRepository = employeeRepository;
     }
 
-    public async Task<Employee> CreateEmployee(Employee employee)
+    public async Task<Employee> CreateEmployee(EmployeeDto employee)
     {
         if (employee == null)
         {
             throw new ArgumentNullException(nameof(employee));
         }
 
-        return await _employeeRepository.CreateAsync(employee);
+        var newEmployee = new Employee
+        {
+            FirstName = employee.FirstName,
+            LastName = employee.LastName,
+            HireDate = employee.HireDate,
+            DepartmentId = employee.DepartmentId,
+            Phone = employee.Phone,
+            Address = employee.Address
+        };
+
+        return await _employeeRepository.CreateAsync(newEmployee);
     }
 
     public async Task<bool> DeleteEmployee(int id)
@@ -48,14 +59,25 @@ public class EmployeeService : IEmployeeService
         return await _employeeRepository.GetByIdAsync(id);
     }
 
-    public async Task<Employee> UpdateEmployee(Employee employee)
+    public async Task<Employee> UpdateEmployee(UpdateEmployeeDto employee)
     {
        if (employee.Id <= 0)
        {
            throw new ArgumentException("Invalid employee ID", nameof(employee.Id));
        }
+
+       var employeeToUpdate = new Employee
+       {
+           Id = employee.Id,
+           FirstName = employee.FirstName,
+           LastName = employee.LastName,
+           HireDate = employee.HireDate,
+           DepartmentId = employee.DepartmentId,
+           Phone = employee.Phone,
+           Address = employee.Address
+       };
        
-       return await _employeeRepository.UpdateAsync(employee);
+       return await _employeeRepository.UpdateAsync(employeeToUpdate);
 
     }
 }

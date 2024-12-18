@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using mind.Core.Interfaces.IServices;
 using mind.Core.Models;
 using mind.Core.Models.DbModels;
+using mind.Core.Models.DTOs;
 
 namespace mind.API.Controllers;
 
@@ -57,7 +58,7 @@ public class EmployeeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<BaseApiResponse>> CreateEmployee([FromBody] Employee employee)
+    public async Task<ActionResult<BaseApiResponse>> CreateEmployee([FromBody] EmployeeDto employee)
     {
         if (employee == null)
         {
@@ -81,7 +82,7 @@ public class EmployeeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<BaseApiResponse>> UpdateEmployee([FromBody] Employee employee)
+    public async Task<ActionResult<BaseApiResponse>> UpdateEmployee([FromBody] UpdateEmployeeDto employee)
     {
         if (employee == null)
         {

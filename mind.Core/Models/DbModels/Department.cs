@@ -14,7 +14,5 @@ public class Department
     [Column("name")]
     [StringLength(50)]
     public string Name { get; set; } = string.Empty;
-
-    public virtual ICollection<Employee>? Employees { get; set; }
 }
 

@@ -1,15 +1,15 @@
 ﻿using System.Net;
+using System.Text.Json.Serialization;
 
 namespace mind.Core.Models;
 
 public class BaseApiResponse
 {
-    public HttpStatusCode StatusCode { get; set; }
+    public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.OK;
 
-    public bool IsSuccess { get; set; } = true;
-
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<string>? ErrorMessages { get; set; }
-
+    
     public object? Result { get; set; }
 }
 

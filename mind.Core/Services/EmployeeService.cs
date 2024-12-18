@@ -1,3 +1,4 @@
+using mind.Core.Interfaces.IRepositories;
 using mind.Core.Interfaces.IServices;
 using mind.Core.Models.DbModels;
 
@@ -5,28 +6,56 @@ namespace mind.Core.Services;
 
 public class EmployeeService : IEmployeeService
 {
-    public Task<Employee> CreateEmployee(Employee employee)
+    private readonly IEmployeeRepository _employeeRepository;
+
+    public EmployeeService(IEmployeeRepository employeeRepository)
     {
-        throw new NotImplementedException();
+        _employeeRepository = employeeRepository;
     }
 
-    public Task<bool> DeleteEmployee(int id)
+    public async Task<Employee> CreateEmployee(Employee employee)
     {
-        throw new NotImplementedException();
+        if (employee == null)
+        {
+            throw new ArgumentNullException(nameof(employee));
+        }
+
+        return await _employeeRepository.CreateAsync(employee);
     }
 
-    public Task<IEnumerable<Employee>> GetAllEmployees()
+    public async Task<bool> DeleteEmployee(int id)
     {
-        throw new NotImplementedException();
+        if (id <= 0)
+        {
+            throw new ArgumentException("Invalid employee ID", nameof(id));
+        }
+
+        return await _employeeRepository.DeleteAsync(id);
     }
 
-    public Task<Employee?> GetEmployeeById(int id)
+    public async Task<IEnumerable<Employee>> GetAllEmployees()
     {
-        throw new NotImplementedException();
+        return await _employeeRepository.GetAllAsync();
     }
 
-    public Task<Employee> UpdateEmployee(Employee employee)
+    public async Task<Employee?> GetEmployeeById(int id)
     {
-        throw new NotImplementedException();
+        if (id <= 0)
+        {
+            throw new ArgumentException("Invalid employee ID", nameof(id));
+        }
+
+        return await _employeeRepository.GetByIdAsync(id);
+    }
+
+    public async Task<Employee> UpdateEmployee(Employee employee)
+    {
+       if (employee.Id <= 0)
+       {
+           throw new ArgumentException("Invalid employee ID", nameof(employee.Id));
+       }
+       
+       return await _employeeRepository.UpdateAsync(employee);
+
     }
 }

@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using mind.Core.Interfaces.IRepositories;
+using mind.Core.Interfaces.IServices;
+using mind.Core.Services;
 using mind.Infraestructure.Data;
+using mind.Infraestructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +18,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"));
 });
+
+// Dependency Injection of the services and repositories
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
 var app = builder.Build();
 

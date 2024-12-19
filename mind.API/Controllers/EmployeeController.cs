@@ -27,10 +27,10 @@ public class EmployeeController : ControllerBase
     public async Task<ActionResult<BaseApiResponse>> GetEmployees()
     {
         var employees = await _employeeService.GetAllEmployees();
-        if (employees == null)
+        if (employees == null || employees.ToList().Count == 0)
         {
             _response.StatusCode = HttpStatusCode.NotFound;
-            _response.Result = "No departments found";
+            _response.Result = employees;
             return NotFound(_response);
         }
         _response.Result = employees;

@@ -23,10 +23,10 @@ public class DepartmentController : ControllerBase
     public async Task<ActionResult<BaseApiResponse>> GetDepartments()
     {
         var departments = await _departmentService.GetAllDepartments();
-        if (departments == null)
+        if (departments == null || departments.ToList().Count == 0)
         {
             _response.StatusCode = System.Net.HttpStatusCode.NotFound;
-            _response.Result = "No departments found";
+            _response.Result = departments;
             return NotFound(_response);
         }
         _response.Result = departments;

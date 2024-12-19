@@ -24,4 +24,10 @@
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../mind.API/mind.API.csproj" />
+    <ProjectReference Include="../mind.Core/mind.Core.csproj" />
+    <ProjectReference Include="../mind.Infraestructure/mind.Infraestructure.csproj" />
+  </ItemGroup>
+
 </Project>

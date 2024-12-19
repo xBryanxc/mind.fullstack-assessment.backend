@@ -16,7 +16,7 @@ public class EmployeeDto
     public DateTime HireDate { get; set; }
 
     [Required]
-    [Range(1, 1, ErrorMessage = "Department ID must be greater than 0")]
+    [Range(1, int.MaxValue, ErrorMessage = "Department ID must be greater than 0")]
     public int DepartmentId { get; set; }
 
     [StringLength(15)]

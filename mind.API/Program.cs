@@ -1,9 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using mind.API.Middlewares;
 using mind.Core.Interfaces.IRepositories;
 using mind.Core.Interfaces.IServices;
 using mind.Core.Services;
 using mind.Infraestructure.Data;
 using mind.Infraestructure.Repositories;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.File.Header;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options => 
@@ -33,6 +37,15 @@ builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
+Log.Logger = new LoggerConfiguration()
+            .WriteTo.Logger(lc => lc
+                .Filter.ByIncludingOnly(le => le.Level == LogEventLevel.Information)
+                .WriteTo.File("./Logs/RequestLogs/RequestLogs-.txt", rollingInterval: RollingInterval.Day, hooks: new HeaderWriter("Date - ApiCall - Method - Body"), outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm} - {Message}{NewLine}"))
+            .WriteTo.Logger(lc => lc
+                .Filter.ByIncludingOnly(le => le.Level == LogEventLevel.Error)
+                .WriteTo.File("./Logs/ErrorLogs/ErrorLogs-.txt", rollingInterval: RollingInterval.Day, hooks: new HeaderWriter("Date - ApiCall - Method - Body - Exception"), outputTemplate: "{Message}{NewLine}{Exception}"))
+            .CreateLogger();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -46,6 +59,8 @@ app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<LogginMiddleware>();
 
 app.MapControllers();
 

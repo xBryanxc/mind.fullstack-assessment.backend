@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using mind.Core.Extensions;
 
 namespace mind.Core.Models.DbModels;
 
@@ -38,5 +39,14 @@ public class Employee
 
     [ForeignKey("DepartmentId")]
     public virtual Department? Department { get; set; }
+
+    [NotMapped]
+    public string TimeWorked
+    {
+        get
+        {
+           return HireDate.GetTimeWorked();
+        }
+    }
 }
 
